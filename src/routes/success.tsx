@@ -21,7 +21,7 @@ export const Route = createFileRoute('/success')({
 function SuccessPage() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['payment'],
-    queryFn: async () => {
+    queryFn: async ({ client }) => {
       const urlPaymentResult = sdk.parsePaymentFromUrl();
 
       if (!urlPaymentResult.txHash) {
@@ -31,7 +31,7 @@ function SuccessPage() {
       const tx = await sdk.getPayment(urlPaymentResult.txHash);
 
       if (!tx) {
-        return null;
+        throw new Error('Transaction not found');
       }
 
       const memo = tx?.memo;
@@ -65,7 +65,11 @@ function SuccessPage() {
     },
     retry: (failureCount, error) => {
       // Only retry if we got null (no transaction) and haven't retried too many times
-      return error === null && failureCount < 5;
+      return (
+        error instanceof Error &&
+        error.message === 'Transaction not found' &&
+        failureCount < 20
+      );
     },
     retryDelay: 500, // Retry every 500ms
   });
