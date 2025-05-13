@@ -13,3 +13,9 @@ export interface StoreItem {
 export interface StoreOrder {
   [key: string]: number;
 }
+
+export interface CategoryConfig {
+  order: number;
+  title: string;
+  description: string;
+}

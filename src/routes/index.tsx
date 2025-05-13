@@ -1,6 +1,6 @@
 import { CategoryMenu } from '@/components/CategoryMenu';
 import { ShopCard } from '@/components/ShopCard';
-import { STORE_CONFIG, STORE_ORDER } from '@/constants';
+import { CATEGORY_CONFIG, STORE_CONFIG } from '@/constants';
 import type { StoreItem } from '@/types';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -10,8 +10,8 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const sortedByCategory = [...STORE_CONFIG].sort((a, b) => {
-    const orderA = STORE_ORDER[a.category] ?? 999;
-    const orderB = STORE_ORDER[b.category] ?? 999;
+    const orderA = CATEGORY_CONFIG[a.category]?.order ?? 999;
+    const orderB = CATEGORY_CONFIG[b.category]?.order ?? 999;
     return orderA - orderB;
   });
 
@@ -41,18 +41,30 @@ function App() {
     >
       <CategoryMenu categories={categories} />
       <div className="container mx-auto relative z-10">
-        {Object.entries(groupedItems).map(([category, items]) => (
-          <div key={category} id={category} className="mb-12 scroll-mt-32">
-            <h2 className="text-3xl font-bold mb-6 capitalize text-white">
-              {category}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {items.map((item) => (
-                <ShopCard key={item.name} {...item} />
-              ))}
+        {Object.entries(groupedItems).map(([category, items]) => {
+          const categoryConfig = CATEGORY_CONFIG[category] || {
+            title: category.charAt(0).toUpperCase() + category.slice(1),
+            description: `Browse our ${category} collection`,
+          };
+
+          return (
+            <div key={category} id={category} className="mb-12 scroll-mt-32">
+              <div className="mb-6">
+                <h2 className="text-3xl font-bold capitalize text-white">
+                  {categoryConfig.title}
+                </h2>
+                <p className="text-lg text-white/80 mt-2">
+                  {categoryConfig.description}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {items.map((item) => (
+                  <ShopCard key={item.name} {...item} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
