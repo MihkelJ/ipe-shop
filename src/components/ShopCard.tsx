@@ -1,5 +1,6 @@
 import type { StoreItem } from '@/types';
 import sdk from '@/utils/yodlsdk';
+import { useRouter } from '@tanstack/react-router';
 import type { FiatCurrency } from '@yodlpay/yapp-sdk';
 import React from 'react';
 import { Button } from './ui/button';
@@ -21,14 +22,17 @@ export const ShopCard: React.FC<StoreItem> = ({
   inStock,
   seller,
 }) => {
+  const router = useRouter();
   const handleBuy = async () => {
-    await sdk.requestPayment({
+    const payment = await sdk.requestPayment({
       addressOrEns: seller,
       amount: price,
       currency: currency as FiatCurrency,
       memo: name,
       redirectUrl: `${window.location.origin}/success`,
     });
+
+    router.navigate({ to: '/success', params: { ...payment } });
   };
 
   return (
