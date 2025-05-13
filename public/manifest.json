@@ -1,0 +1,15 @@
+{
+  "short_name": "IPE Shop",
+  "name": "IPE Shop - E-commerce platform for IPE City vendors",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "800x800"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
