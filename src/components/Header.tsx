@@ -20,7 +20,7 @@ export default function Header() {
               alt="IPE Shop Logo"
               className="h-8 w-8 rounded-lg"
             />
-            <span className="font-bold">IPE Shop</span>
+            <span className="font-bold">Ipê City - Marketplace</span>
           </a>
         </div>
       </div>
