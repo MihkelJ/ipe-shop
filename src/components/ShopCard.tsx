@@ -32,7 +32,7 @@ export const ShopCard: React.FC<StoreItem> = ({
       redirectUrl: `${window.location.origin}/success`,
     });
 
-    router.navigate({ to: '/success', params: { ...payment } });
+    router.navigate({ to: '/success', search: { ...payment } });
   };
 
   return (
