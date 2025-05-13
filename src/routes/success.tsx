@@ -31,7 +31,7 @@ function SuccessPage() {
       const tx = await sdk.getPayment(urlPaymentResult.txHash);
 
       if (!tx) {
-        return null;
+        throw new Error('Transaction not found');
       }
 
       const memo = tx?.memo;
@@ -65,7 +65,11 @@ function SuccessPage() {
     },
     retry: (failureCount, error) => {
       // Only retry if we got null (no transaction) and haven't retried too many times
-      return error === null && failureCount < 5;
+      return (
+        error instanceof Error &&
+        error.message === 'Transaction not found' &&
+        failureCount < 20
+      );
     },
     retryDelay: 500, // Retry every 500ms
   });
@@ -151,17 +155,16 @@ function SuccessPage() {
       }}
     >
       <Card className="w-full max-w-md">
-        {!isLoading && data && (
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">
-              Payment Successful!
-            </CardTitle>
-            <CardDescription className="text-center">
-              Thank you for your purchase. Your transaction has been completed
-              successfully.
-            </CardDescription>
-          </CardHeader>
-        )}
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">
+            {isLoading ? 'Processing Payment...' : 'Payment Successful!'}
+          </CardTitle>
+          <CardDescription className="text-center">
+            {isLoading
+              ? 'Please wait while we verify your payment...'
+              : 'Thank you for your purchase. Your transaction has been completed successfully.'}
+          </CardDescription>
+        </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
           {isLoading ? (
             <div className="text-center w-full">
@@ -208,7 +211,12 @@ function SuccessPage() {
                 )}
               </div>
             </>
-          ) : null}
+          ) : (
+            <div className="text-center">
+              <p>No data</p>
+              <p>{JSON.stringify(data)}</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
