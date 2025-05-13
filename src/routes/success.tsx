@@ -118,7 +118,7 @@ function SuccessPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-sm text-muted-foreground text-center">
-              Please try again or contact support if the problem persists.
+              Please try again or contact us in our Telegram group for support.
             </div>
             <div className="flex gap-2">
               <Button asChild variant="outline" className="flex-1">
@@ -126,17 +126,6 @@ function SuccessPage() {
                   <ArrowLeft className="h-4 w-4" />
                   Back to Shop
                 </Link>
-              </Button>
-              <Button asChild className="flex-1">
-                <a
-                  href="https://t.me/ipe_city"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  Contact Support
-                </a>
               </Button>
             </div>
           </CardContent>
