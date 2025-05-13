@@ -21,7 +21,7 @@ export const Route = createFileRoute('/success')({
 function SuccessPage() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['payment'],
-    queryFn: async ({ client }) => {
+    queryFn: async () => {
       const urlPaymentResult = sdk.parsePaymentFromUrl();
 
       if (!urlPaymentResult.txHash) {
@@ -155,17 +155,16 @@ function SuccessPage() {
       }}
     >
       <Card className="w-full max-w-md">
-        {!isLoading && data && (
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">
-              Payment Successful!
-            </CardTitle>
-            <CardDescription className="text-center">
-              Thank you for your purchase. Your transaction has been completed
-              successfully.
-            </CardDescription>
-          </CardHeader>
-        )}
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">
+            {isLoading ? 'Processing Payment...' : 'Payment Successful!'}
+          </CardTitle>
+          <CardDescription className="text-center">
+            {isLoading
+              ? 'Please wait while we verify your payment...'
+              : 'Thank you for your purchase. Your transaction has been completed successfully.'}
+          </CardDescription>
+        </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
           {isLoading ? (
             <div className="text-center w-full">
@@ -212,7 +211,12 @@ function SuccessPage() {
                 )}
               </div>
             </>
-          ) : null}
+          ) : (
+            <div className="text-center">
+              <p>No data</p>
+              <p>{JSON.stringify(data)}</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
